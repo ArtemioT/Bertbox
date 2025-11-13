@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Button Interface</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <h1>Control Panel</h1>
+
+    <div class="button-container">
+        <button id="btn1" onclick="buttonAction('Sensor Code Restarting... Running')">Turn on Sensor</button>
+        <button id="btn2" onclick="buttonAction('Pump Code Restarting... Running')">Turn on Pump</button>
+        <button id="btn3" onclick="buttonAction('Valve Code Restarting... Running')">Open/Close Valves</button>
+        <button id="btn4" onclick="buttonAction('Full Test Restarting... Running')">Full Test Reset</button>
+    </div>
+
+    <p id="output" style="margin-top: 40px; font-size: 20px;"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
