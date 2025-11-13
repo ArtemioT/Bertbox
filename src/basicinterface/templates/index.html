@@ -11,10 +11,10 @@
     <h1>Control Panel</h1>
 
     <div class="button-container">
-        <button onclick="sendCommand('/sensor', 'Sensor Code Restarting... Running')">Turn on Sensor</button>
+        <button onclick="sendCommand('/sensor', 'Sensor Code Restarting')">Turn on Sensor</button>
+        <button onclick="sendCommand('/sensoroff', 'Sensor Off Running')">Turn off Sensor</button>
         <button onclick="sendCommand('/pump', 'Pump Code Restarting... Running')">Turn on Pump</button>
         <button onclick="sendCommand('/valve', 'Valve Code Restarting... Running')">Open/Close Valves</button>
-        <button onclick="sendCommand('/fulltest', 'Full Test Restarting... Running')">Full Test Reset</button>
     </div>
 
     <p id="output" style="margin-top: 40px; font-size: 20px;"></p>

@@ -39,5 +39,9 @@ def valve():
     send_to_cpp("valve")
     return "Valve command sent"
 
+@app.route("/sensoroff", methods=["POST"])
+def offsensor():
+    send_to_cpp("sensor OFF")
+    return "Sensor Command Send"
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
