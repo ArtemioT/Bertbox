@@ -2,18 +2,33 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index')
+    return render_template("index.html")
 
-@app.route('/button', methods=["POST"])
-def button_action():
-    data 
+@app.route("/sensor", methods=["POST"])
+def sensor():
+    print("Sensor Code Restarting... Running")
+    
+    return "Sensor action complete"
 
-@app.route('/status')
-def status():
-    return "Button ready."
+@app.route("/pump", methods=["POST"])
+def pump():
+    print("Pump Code Restarting... Running")
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=48372)
+    return "Pump action complete"
+
+@app.route("/valve", methods=["POST"])
+def valve():
+    print("Valve Code Restarting... Running")
+
+    return "Valve action complete"
+
+@app.route("/fulltest", methods=["POST"])
+def fulltest():
+    print("Full Test Restarting... Running")
+
+    return "Full Test action complete"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
