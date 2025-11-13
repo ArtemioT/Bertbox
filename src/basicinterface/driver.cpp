@@ -54,13 +54,17 @@ void handle_client(int client_socket) {
 
         // Example: handle specific commands
         if (message == "sensor") {
-            std::cout << "→ Turning pump ON\n";
+            std::cout << "→ Turning Sensor ON\n";
             system("python led.py");
-            // system("python3 pump_on.py");  // example: run script
+            // change ^ to system("python ultrasonic.py")
         } else if (message == "sensor OFF") {
-            std::cout << "→ Turning pump OFF\n";
+            std::cout << "→ Turning Sensor OFF\n";
+            system("pkill -f led.py");
             system("python cleanup.py");
-            // system("python3 pump_off.py");
+            // change above to
+            //system("pkill -f ultrasonic.py")
+            //system("python ultrasoniccleanup.py")
+
         } else {
             std::cout << "→ Unknown command.\n";
         }

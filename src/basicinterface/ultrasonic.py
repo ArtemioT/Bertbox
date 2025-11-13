@@ -45,30 +45,23 @@ def get_distance():
     distance = (elapsed * 343.0) / 2.0
     return distance
 
-try:
-    while True:
-        distance = get_distance()
-        if distance is None:
-            print("Timeout: No echo received.")
-            time.sleep(0.5)
-            continue
-
-        water_height = SENSOR_TO_BOTTOM - distance
-        if water_height < 0:
-            water_height = 0
-
-        print(f"Water height (m): {water_height:.3f}")
-
-        # Control relay based on level
-        if water_height < MAX_LEVEL - 0.01:
-            GPIO.output(RELAY_PIN, GPIO.HIGH)  # Pump ON
-        elif water_height >= MAX_LEVEL:
-            GPIO.output(RELAY_PIN, GPIO.LOW)   # Pump OFF
-
+while True:
+    distance = get_distance()
+    if distance is None:
+        print("Timeout: No echo received.")
         time.sleep(0.5)
+        continue
 
-except KeyboardInterrupt:
-    print("Exiting program...")
+    water_height = SENSOR_TO_BOTTOM - distance
+    if water_height < 0:
+        water_height = 0
 
-finally:
-    GPIO.cleanup()
+    print(f"Water height (m): {water_height:.3f}")
+
+    # Control relay based on level
+    if water_height < MAX_LEVEL - 0.01:
+        GPIO.output(RELAY_PIN, GPIO.HIGH)  # Pump ON
+    elif water_height >= MAX_LEVEL:
+        GPIO.output(RELAY_PIN, GPIO.LOW)   # Pump OFF
+
+    time.sleep(0.5)

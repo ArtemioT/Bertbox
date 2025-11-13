@@ -1,6 +1,6 @@
+# cleanup.py
 import RPi.GPIO as GPIO
-import time
-
-
-
+LED = 17
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED, GPIO.OUT)
 GPIO.cleanup()
