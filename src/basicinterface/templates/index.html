@@ -4,29 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Control Panel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
     <h1>Control Panel</h1>
-
+    
+    <li><a href="/general">General UI</a></li>
+    
     <div class="button-container">
 
         <!-- SENSOR BUTTONS -->
         <button id="sensor_on"  onclick="pressSensorOn()">Turn on Sensor</button>
         <button id="sensor_off" onclick="pressSensorOff()">Turn off Sensor</button>
 
-        <!-- OTHER BUTTONS (no locking needed)
-        <button onclick="sendCommand('/pump', 'Pump Code Restarting... Running')">
+        <button onclick="sendCommand('/start_pump', 'Pump Code Restarting... Running')">
             Turn on Pump
         </button>
         <button onclick="sendCommand('/valve', 'Valve Code Restarting... Running')">
             Open/Close Valves
-        </button> -->
-    </div>
+        </button>
+        <button onclick="sendCommand('/runtest', 'Test Running')">
+            Run Test
+        </button>
 
+    </div>
+    
+    
+    
     <p id="output" style="margin-top: 40px; font-size: 20px;"></p>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
