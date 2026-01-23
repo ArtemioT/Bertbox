@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi import HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import socket
@@ -19,6 +20,7 @@ templates = Jinja2Templates(directory="templates")
 def send_command(cmd):
     print("in send_command")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -27,25 +29,33 @@ async def home(request: Request):
 async def general(request: Request):
     return templates.TemplateResponse("general.html", {"request": request})
 
-@app.post("/sensor")
-async def sensor():
-    send_command("blank")
+@app.post("/sensor/{action}")
+async def sensor(action: str):
+    if action not in ["on", "off"]:
+        raise HTTPException(status_code=400, detail="Invalid sensor action")
+
     return {"message": "Sensor command sent"}
 
-@app.post("/start_pump")
-async def start_pump():
-    send_command("START_PUMP")
+@app.post("/pump/{action}")
+async def start_pump(action: str):
+    if action not in ["on", "off"]:
+        raise HTTPException(status_code=400, detail="Invalid pump action")
+    
     return {"message": "Pump started"}
 
-@app.post("/valve")
-async def valve():
-    send_command("blank")
+@app.post("/valve/{valve_number}/{action}")
+async def valve(valve_number: int, action: str):
+    
+    if action not in ["Open", "Close"]:
+        raise HTTPException(status_code=400, detail="Invalid action")
+
+    if valve_number < 1 or valve_number > 3:
+        raise HTTPException(status_code=400, detail="Invalid Valve Number")
+    
+    command = f"valve{valve_number}{action.capitalize()}"
+    send_command(command)
     return {"message": "Valve command sent"}
 
-@app.post("/sensoroff")
-async def offsensor():
-    send_command("blank")
-    return {"message": "Sensor Command Send"}
 
 @app.get("/metrics")
 async def metrics():
