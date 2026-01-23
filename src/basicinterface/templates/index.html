@@ -7,32 +7,84 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
-<body>
+<body class="light-mode">
     <h1>Control Panel</h1>
     
-    <li><a href="/general">General UI</a></li>
-    
-    <div class="button-container">
+    <div class="sections-grid">
+        <!-- GENERAL UI SECTION -->
+        <div class="section">
+            <h2>Navigation</h2>
+            <div class="section-content">
+                <a href="/generalInterface" class="nav-button">General UI</a>
+            </div>
+        </div>
+        <!-- SENSOR CONTROLS SECTION -->
+        <div class="section">
+            <h2>Sensor Controls</h2>
+            <div class="section-content">
+                <div class="button-container">
+                    <button id="sensor_on" onclick="pressSensorOn()">Turn on Sensor</button>
+                    <button id="sensor_off" onclick="pressSensorOff()">Turn off Sensor</button>
+                </div>
+            </div>
+        </div>
 
-        <!-- SENSOR BUTTONS -->
-        <button id="sensor_on"  onclick="pressSensorOn()">Turn on Sensor</button>
-        <button id="sensor_off" onclick="pressSensorOff()">Turn off Sensor</button>
+        <!-- PUMP CONTROLS SECTION -->
+        <div class="section">
+            <h2>Pump Controls</h2>
+            <div class="section-content">
+                <div class="button-container">
+                    <button onclick="sendCommand('/start_pump', 'Pump Turning On')">
+                        Turn on Pump
+                    </button>
+                    <button onclick="sendCommand('/stop_pump', 'Turning Off Pump')">
+                        Turn Off Pump
+                    </button>
+                </div>
+            </div>
+        </div>
 
-        <button onclick="sendCommand('/start_pump', 'Pump Code Restarting... Running')">
-            Turn on Pump
-        </button>
-        <button onclick="sendCommand('/valve', 'Valve Code Restarting... Running')">
-            Open/Close Valves
-        </button>
-        <button onclick="sendCommand('/runtest', 'Test Running')">
-            Run Test
-        </button>
+        <!-- VALVE CONTROLS SECTION -->
+        <div class="section">
+            <h2>Valve Controls</h2>
+            <div class="section-content">
+                <div class="button-container">
+                    <button onclick="sendCommand('/valve1Open', 'Valve 1 Opening')">
+                        Open Valve 1
+                    </button>
+                    <button onclick="sendCommand('/valve1Close', 'Valve 1 Closing')">
+                        Close Valve 1
+                    </button>
+                    <button onclick="sendCommand('/valve2Open', 'Valve 2 Opening')">
+                        Open Valve 2
+                    </button>
+                    <button onclick="sendCommand('/valve2Close', 'Valve 2 Closing')">
+                        Close Valve 2
+                    </button>
+                    <button onclick="sendCommand('/valve3Open', 'Valve 3 Opening')">
+                        Open Valve 3
+                    </button>
+                    <button onclick="sendCommand('/valve3Close', 'Valve 3 Closing')">
+                        Close Valve 3
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        <!-- TEST CONTROLS SECTION -->
+        <div class="section">
+            <h2>Test Controls</h2>
+            <div class="section-content">
+                <div class="button-container">
+                    <button onclick="sendCommand('/runtest', 'Test Running')">
+                        Run Test
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     
-    
-    
-    <p id="output" style="margin-top: 40px; font-size: 20px;"></p>
+    <div id="output"></div>
 
     <script src="/static/script.js"></script>
 </body>

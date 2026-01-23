@@ -16,32 +16,20 @@ app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="stat
 # Set up templates directory
 templates = Jinja2Templates(directory="templates")
 
-def send_to_cpp(command):
-    HOST = "127.0.0.1"  # since FastAPI and C++ run on same Pi
-    PORT = 6000
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((HOST, PORT))
-            s.sendall(command.encode())
-    except ConnectionRefusedError:
-        print("C++ listener not active")
-
 def send_command(cmd):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(("localhost", 6000))
-        s.sendall(cmd.encode())
+    print("in send_command")
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/general", response_class=HTMLResponse)
+@app.get("/generalInterface", response_class=HTMLResponse)
 async def general(request: Request):
     return templates.TemplateResponse("general.html", {"request": request})
 
 @app.post("/sensor")
 async def sensor():
-    send_to_cpp("sensor")
+    send_command("blank")
     return {"message": "Sensor command sent"}
 
 @app.post("/start_pump")
@@ -51,13 +39,18 @@ async def start_pump():
 
 @app.post("/valve")
 async def valve():
-    send_to_cpp("valve")
+    send_command("blank")
     return {"message": "Valve command sent"}
 
 @app.post("/sensoroff")
 async def offsensor():
-    send_to_cpp("sensor OFF")
+    send_command("blank")
     return {"message": "Sensor Command Send"}
+
+@app.get("/metrics")
+async def metrics():
+    return{"message": "CS checking script"}
+
 
 if __name__ == "__main__":
     import uvicorn
