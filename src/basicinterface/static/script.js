@@ -14,7 +14,7 @@ function sendCommand(endpoint, message) {
 }
 
 function pressSensorOn() {
-    sendCommand("/sensor/on", "Sensor Code Running");
+    sendCommand("/Sensor/On", "Sensor Code Running");
 
     // Lock ON button, unlock OFF button
     document.getElementById("sensor_on").disabled = true;
@@ -22,7 +22,7 @@ function pressSensorOn() {
 }
 
 function pressSensorOff() {
-    sendCommand("/sensor/off", "Sensor Code Stopping");
+    sendCommand("/Sensor/Off", "Sensor Code Stopping");
 
     // Lock OFF button, unlock ON button
     document.getElementById("sensor_on").disabled = false;

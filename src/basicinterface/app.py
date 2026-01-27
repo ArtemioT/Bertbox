@@ -3,7 +3,6 @@ from fastapi.responses import HTMLResponse
 from fastapi import HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import socket
 from pathlib import Path
 
 app = FastAPI()
@@ -19,29 +18,28 @@ templates = Jinja2Templates(directory="templates")
 
 def send_command(cmd):
     print("in send_command")
+    print(cmd)
 
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "window": "Test Window"})
 
 @app.get("/generalInterface", response_class=HTMLResponse)
 async def general(request: Request):
-    return templates.TemplateResponse("general.html", {"request": request})
+    return templates.TemplateResponse("general.html", {"request": request, "window": "Interface Window"})
 
-@app.post("/sensor/{action}")
-async def sensor(action: str):
-    if action not in ["on", "off"]:
-        raise HTTPException(status_code=400, detail="Invalid sensor action")
-
-    return {"message": "Sensor command sent"}
-
-@app.post("/pump/{action}")
-async def start_pump(action: str):
-    if action not in ["on", "off"]:
-        raise HTTPException(status_code=400, detail="Invalid pump action")
+@app.post("/{control}/{action}")
+async def control(action: str, control: str):
+    if control not in ["Pump", "Sensor"]:
+        raise HTTPException(status_code=400, detail="Invalid control object")
     
-    return {"message": "Pump started"}
+    if action not in ["On", "Off"]:
+        raise HTTPException(status_code=400, detail="Invalid sensor action")
+    output = {"message": f"{control} {action} command sent"}
+    
+    return output
+
 
 @app.post("/valve/{valve_number}/{action}")
 async def valve(valve_number: int, action: str):
@@ -53,12 +51,14 @@ async def valve(valve_number: int, action: str):
         raise HTTPException(status_code=400, detail="Invalid Valve Number")
     
     command = f"valve{valve_number}{action.capitalize()}"
+    output = {"message": f"Valve {valve_number} {action} command sent"}
     send_command(command)
-    return {"message": "Valve command sent"}
+    return output
 
 
 @app.get("/metrics")
 async def metrics():
+    # Does nothing here to make sure no errors happen
     return{"message": "CS checking script"}
 
 
