@@ -1,0 +1,13 @@
+Time,Name,Status,Notes
+2026-01-30 12:47:42,Valve 1,IDLE,
+2026-01-30 12:47:42,Valve 2,IDLE,
+2026-01-30 12:47:42,Valve 3,IDLE,
+2026-01-30 12:47:42,Main Pump,IDLE,
+2026-01-30 12:48:14,Main Pump,Running,
+2026-01-30 12:48:20,Main Pump,IDLE,
+2026-01-30 12:48:23,Valve 1,Opening,
+2026-01-30 12:48:23,Valve 1,OPEN,
+2026-01-30 12:48:26,Valve 1,Closing,
+2026-01-30 12:48:26,Valve 1,CLOSED,
+2026-01-30 12:48:35,Valve 1,Opening,
+2026-01-30 12:48:35,Valve 1,OPEN,

@@ -5,9 +5,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 
-import contols.Controller as SystemController
+import controls.Controller as SystemController
+from controls.Valve_State_Machine import ValveStateMachine, CreateValveStateMachine, ValveState
+from controls.Pump_State_Machine import PumpState, PumpStateMachine, CreatePumpStateMachine
 
-system = SystemController(num_valves=3)
+
+system = SystemController.SystemController(num_valves=3)
 
 app = FastAPI()
 
@@ -40,9 +43,24 @@ async def control(action: str, control: str):
     
     if action not in ["On", "Off"]:
         raise HTTPException(status_code=400, detail="Invalid sensor action")
-    output = {"message": f"{control} {action} command sent"}
     
-    return output
+    if control == "Pump":
+        if action == "On":
+            system.get_pump().on_event(PumpState.RUNNING)
+            message = "Pump turned on (RUNNING)"
+        else:
+            system.get_pump().on_event(PumpState.IDLE)
+            message = "Pump turned off (IDLE)"
+        command = f"pump{action}"
+        send_command(command)
+        return {"message": message, "state": system.get_pump().state.name}
+    elif control == "Sensor":
+        system.sensor_active = (action == "On")
+
+        command = f"sensor{action}"
+        send_command(command)
+
+        return {"message": f"Sensor turned {action.lower()}", "state": "ON" if system.sensor_active else "OFF"}
 
 
 @app.post("/valve/{valve_number}/{action}")
@@ -54,11 +72,24 @@ async def valve(valve_number: int, action: str):
     if valve_number < 1 or valve_number > 3:
         raise HTTPException(status_code=400, detail="Invalid Valve Number")
     
-    command = f"valve{valve_number}{action.capitalize()}"
-    output = {"message": f"Valve {valve_number} {action} command sent"}
-    send_command(command)
+    valve_sm = system.get_valve(valve_number)
 
-    return output
+    if not valve_sm:
+        raise HTTPException(status_code= 404, detail =f"Valve {valve_number} not found")
+
+    if action == "Open":
+        valve_sm.on_event(ValveState.OPENING)
+        valve_sm.on_event(ValveState.OPEN)
+        message = f"Valve {valve_number} opened"
+    else:
+        valve_sm.on_event(ValveState.CLOSING)
+        valve_sm.on_event(ValveState.CLOSED)
+        message = f"Valve {valve_number} closed"
+    
+    command = f"valve{valve_number}{action.capitalize()}"
+    send_command(command)
+    
+    return {"message": message, "state": valve_sm.state.name, "valve_number": valve_number}
 
 @app.post("/runTest")
 async def fullTest():
