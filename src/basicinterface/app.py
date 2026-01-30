@@ -53,8 +53,17 @@ async def valve(valve_number: int, action: str):
     command = f"valve{valve_number}{action.capitalize()}"
     output = {"message": f"Valve {valve_number} {action} command sent"}
     send_command(command)
+
     return output
 
+@app.post("/runTest")
+async def fullTest():
+    #this function should first reset all controls then run all controls.
+    output = {"message": "Full test command sent"}
+    print(await valve(1, "Open"))
+    
+    send_command("runTest")
+    return output
 
 @app.get("/metrics")
 async def metrics():
