@@ -5,6 +5,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 
+import contols.Controller as SystemController
+
+system = SystemController(num_valves=3)
+
 app = FastAPI()
 
 # Get the current directory
