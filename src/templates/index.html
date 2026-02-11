@@ -82,7 +82,8 @@
                 </div>
             </div>
         </div>
-        <!-- REST CONTROLS SECTION -->
+
+        <!-- RESET CONTROLS SECTION -->
         <div class="section">
             <h2>Reset Controls</h2>
             <div class="section-content">
@@ -90,6 +91,41 @@
                     <button onclick="sendCommand('/reset', 'resetting components')">
                         Reset Components
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS SECTION -->
+        <div class="section">
+            <h2>System Status</h2>
+                <div class="section-content">
+                <div class="status-item">
+                    <span class="status-label">Pump:</span>
+                    <span id="status-pump" class="status-value status-idle">IDLE</span>
+                </div>
+                
+                <div class="status-item">
+                    <span class="status-label">Sensor:</span>
+                    <span id="status-sensor" class="status-value status-off">OFF</span>
+                </div>
+                
+                <div class="status-item">
+                    <span class="status-label">Valve 1:</span>
+                    <span id="status-valve1" class="status-value status-idle">IDLE</span>
+                </div>
+                
+                <div class="status-item">
+                    <span class="status-label">Valve 2:</span>
+                    <span id="status-valve2" class="status-value status-idle">IDLE</span>
+                </div>
+                
+                <div class="status-item">
+                    <span class="status-label">Valve 3:</span>
+                    <span id="status-valve3" class="status-value status-idle">IDLE</span>
+                </div>
+
+                <div class="last-updated">
+                    Last updated: <span id="last-updated-time">-</span>
                 </div>
             </div>
         </div>

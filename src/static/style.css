@@ -12,7 +12,57 @@ h1 {
     margin-bottom: 30px;
     color: #2d2d2d;
 }
+.status-box {
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 8px 0;
+    background: #f3f4f6;
+    border-radius: 5px;
+}
 
+.status-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.status-value {
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+/* State colors */
+.status-idle, .status-closed, .status-off {
+    background-color: #9ca3af;
+    color: white;
+}
+
+.status-opening, .status-closing, .status-priming {
+    background-color: #fbbf24;
+    color: #1f2937;
+}
+
+.status-open, .status-running, .status-on {
+    background-color: #10b981;
+    color: white;
+}
+.last-updated {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
 .sections-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
