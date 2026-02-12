@@ -151,6 +151,9 @@ async def reset_system():
     send_command("resetAll")
     return {"message": "System reset completed", "results": result}
 
+@app.get("/status")
+async def get_status():
+    return system.get_system_status()
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
