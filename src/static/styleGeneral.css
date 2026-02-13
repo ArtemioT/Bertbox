@@ -53,7 +53,7 @@ h1 {
 
 .chart-container {
     position: relative;
-    height: 150px;
+    height: 250px;
     margin-bottom: 10px;
 }
 
@@ -92,13 +92,6 @@ button:hover {
     font-size: 14px;
 }
 
-input[type="text"] {
-    width: 60px;
-    padding: 3px 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
 select {
     padding: 5px 10px;
     border: 1px solid black;
@@ -121,6 +114,7 @@ select:hover {
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
+    margin-right: 10px;
 }
 
 .back-button:hover {
@@ -131,4 +125,14 @@ select:hover {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 30px;
+}
+
+.file-upload {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.file-upload input {
+    padding: 10px;
+    border: 2px solid black;
 }

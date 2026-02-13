@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Interface</title>
+    <title>RoboJar User Interface</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link rel="stylesheet" href="/static/styleGeneral.css">
 </head>
 <body>
@@ -18,13 +19,16 @@
                 <div class="chart-container">
                     <canvas id="testChart"></canvas>
                 </div>
+                <div class="info-item" id="testInfo" style="margin-top: 10px; font-size: 12px; color: #666;">
+                    No data loaded
+                </div>
             </div>
 
             <!-- Recommended #s -->
             <div class="section">
                 <h3>Recommended #s</h3>
-                <div class="info-item">Coagulant # mg/L</div>
-                <div class="info-item">Polymer # mg/L</div>
+                <div class="info-item" id="coagulantRec">Coagulant: -- mg/L</div>
+                <div class="info-item" id="polymerRec">Polymer: -- mg/L</div>
             </div>
 
             <!-- Overrides -->
@@ -58,20 +62,26 @@
             <!-- Current Dose -->
             <div class="section">
                 <h3>Current Dose</h3>
-                <div class="info-item">Coagulant # mg/L</div>
-                <div class="info-item">Polymer # mg/L</div>
+                <div class="info-item" id="coagulantDose">Coagulant: -- mg/L</div>
+                <div class="info-item" id="polymerDose">Polymer: -- mg/L</div>
             </div>
 
             <!-- Sensor Readings -->
             <div class="section">
                 <h3>Sensor Readings</h3>
-                <div class="info-item">Volume # L</div>
+                <div class="info-item" id="volumeReading">Volume: -- L</div>
             </div>
 
             <div class="section">
                 <a href="/" class="back-button">Back to Control Panel</a>
-                <a href="http://192.168.137.38/rj/newdash.php"class="back-button">Robojar UI</a>
+                <a href="http://192.168.137.38/rj/newdash.php" class="back-button">Robojar UI</a>
             </div>
+        </div>
+        
+        <div class="file-upload" style="margin-top: 20px;">
+            <input type="file" id="csvFileInput" accept=".csv" />
+            <button onclick="loadUploadedFile()">Load CSV File</button>
+            <span id="fileStatus" style="margin-left: 10px; color: #666;"></span>
         </div>
     </div>
 
