@@ -332,7 +332,9 @@ function loadDemoData() {
     document.getElementById('testInfo').textContent = 
         'Demo Data | Duration: 8 min | Samples: 50';
 }
-
+async function startTest(){
+    const response = await fetch('/RobojarTest', {method: 'POST'})
+}
 // Initialize when the page loads
 window.addEventListener('DOMContentLoaded', function() {
     // Initialize with empty chart
