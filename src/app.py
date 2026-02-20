@@ -7,6 +7,7 @@ from pathlib import Path
 import requests
 import logging
 import time
+import pandas as pd
 
 import controls.Controller as SystemController
 from controls.Valve_State_Machine import ValveStateMachine, CreateValveStateMachine, ValveState
@@ -164,80 +165,110 @@ async def reset_system():
 async def get_status():
     return system.get_system_status()
 
-@app.post("/RobojarTest")
-async def robojarTest():
-    print("im in here")
+@app.post("/download")
+async def download_report():
+    url = "http://192.168.137.201/rj/reportgenrunbase.php"
 
-    session = requests.Session()
-    base_url = 'http://192.168.137.201/rj'
+    run_ids = [30, 24, 22, 20, 17]
 
-    try:
-        print("before protocol data")
-        # Get protocol data
-        response = session.get(f'{base_url}/protocol_mgr.php', params={
-            'func': 'printproto',
-            'format': 'js'
-        })
-        proto_data = response.json()
+    for ids in run_ids:
+
+        payload = {str(ids): "1"}
+
+        response = requests.post(url, data=payload)
+
+        xls_path = f"data/run_{ids}.xls"
         
-        print("before find new")
-        # Find "new" protocol
-        new_protocol = next((p for p in proto_data if p['title'].lower() == 'new'), None)
-        if not new_protocol:
-            raise HTTPException(status_code=404, detail="Protocol not found")
+        with open(xls_path, "wb") as f:
+            f.write(response.content)
+
+        print(f"downloaded run {ids}")
         
-        stage_data = new_protocol['stagedata']
-        total_duration = sum(int(stage['duration']) for stage in stage_data)
-        current_time = int(time.time())
+    
+    print(f"converting run {17}")
+    xls_path = f"data/run_{17}.xls"
+    csv_path = f"data/run_{17}.csv"
+    
+    df = pd.read_excel(xls_path)
+    df.to_csv(csv_path, index=False)
+
+
+    return {"message": f"downloaded {run_ids}"}
+
+# @app.post("/RobojarTest")
+# async def robojarTest():
+#     print("im in here")
+
+#     session = requests.Session()
+#     base_url = 'http://192.168.137.201/rj'
+
+#     try:
+#         print("before protocol data")
+#         # Get protocol data
+#         response = session.get(f'{base_url}/protocol_mgr.php', params={
+#             'func': 'printproto',
+#             'format': 'js'
+#         })
+#         proto_data = response.json()
         
-        print("before run record")
-        # Create run record
-        session.get(f'{base_url}/run_mgr.php', params={
-            'func': 'newrun',
-            'protocol_id': new_protocol['id'],
-            'title': 'Artemio Test',
-            'dose': '',
-            'chem': '',
-            'comment': '',
-            'start': current_time,
-            'end': current_time + total_duration
-        })
+#         print("before find new")
+#         # Find "new" protocol
+#         new_protocol = next((p for p in proto_data if p['title'].lower() == 'new'), None)
+#         if not new_protocol:
+#             raise HTTPException(status_code=404, detail="Protocol not found")
         
-        print("before RPM init")
-        # Set initial RPM
-        first_rpm = stage_data[0]['rpm']
-        session.get(f'{base_url}/setrpm.php', params={'rpm': first_rpm})
+#         stage_data = new_protocol['stagedata']
+#         total_duration = sum(int(stage['duration']) for stage in stage_data)
+#         current_time = int(time.time())
         
-        print("before start motor")
-        # Start the motor
-        session.get(f'{base_url}/floc_control.php', params={'command': 'run_floc'})
+#         print("before run record")
+#         # Create run record
+#         session.get(f'{base_url}/run_mgr.php', params={
+#             'func': 'newrun',
+#             'protocol_id': new_protocol['id'],
+#             'title': 'Artemio Test',
+#             'dose': '',
+#             'chem': '',
+#             'comment': '',
+#             'start': current_time,
+#             'end': current_time + total_duration
+#         })
         
-        print("Motor started, waiting 5 seconds...")
-        # WAIT 5 SECONDS
-        time.sleep(5)
+#         print("before RPM init")
+#         # Set initial RPM
+#         first_rpm = stage_data[0]['rpm']
+#         session.get(f'{base_url}/setrpm.php', params={'rpm': first_rpm})
         
-        print("Stopping motor...")
-        # STOP THE TEST
-        session.get(f'{base_url}/floc_control.php', params={'command': 'stop_floc'})
-        session.get(f'{base_url}/setrpm.php', params={'rpm': 0})
-        session.get(f'{base_url}/setgval.php', params={'gval': 0})
+#         print("before start motor")
+#         # Start the motor
+#         session.get(f'{base_url}/floc_control.php', params={'command': 'run_floc'})
         
-        print("Motor stopped")
+#         print("Motor started, waiting 5 seconds...")
+#         # WAIT 5 SECONDS
+#         time.sleep(5)
         
-        return {
-            "status": "success",
-            "message": "Test completed - ran for 5 seconds and stopped",
-            "protocol": new_protocol['title']
-        }  
-    except Exception as e:
-        print(f"ERROR: {e}")
-        # Emergency stop on error
-        try:
-            session.get(f'{base_url}/floc_control.php', params={'command': 'stop_floc'})
-            session.get(f'{base_url}/setrpm.php', params={'rpm': 0})
-        except:
-            pass
-        raise HTTPException(status_code=500, detail=str(e))
+#         print("Stopping motor...")
+#         # STOP THE TEST
+#         session.get(f'{base_url}/floc_control.php', params={'command': 'stop_floc'})
+#         session.get(f'{base_url}/setrpm.php', params={'rpm': 0})
+#         session.get(f'{base_url}/setgval.php', params={'gval': 0})
+        
+#         print("Motor stopped")
+        
+#         return {
+#             "status": "success",
+#             "message": "Test completed - ran for 5 seconds and stopped",
+#             "protocol": new_protocol['title']
+#         }  
+#     except Exception as e:
+#         print(f"ERROR: {e}")
+#         # Emergency stop on error
+#         try:
+#             session.get(f'{base_url}/floc_control.php', params={'command': 'stop_floc'})
+#             session.get(f'{base_url}/setrpm.php', params={'rpm': 0})
+#         except:
+#             pass
+#         raise HTTPException(status_code=500, detail=str(e))
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

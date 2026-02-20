@@ -335,6 +335,9 @@ function loadDemoData() {
 async function startTest(){
     const response = await fetch('/RobojarTest', {method: 'POST'})
 }
+async function downloadTest(){
+    const response = await fetch('/download', {method: 'POST'})
+}
 // Initialize when the page loads
 window.addEventListener('DOMContentLoaded', function() {
     // Initialize with empty chart
